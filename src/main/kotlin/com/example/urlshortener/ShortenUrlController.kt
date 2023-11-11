@@ -11,7 +11,7 @@ class ShortenUrlController(val service: ShortenUrlService) {
     @PostMapping
     fun create(@RequestBody request: ShortenUrl): ResponseEntity<ShortenUrl> {
         val created = service.create(request)
-        return ResponseEntity.created(URI("http://localhost/${created.id}")).body(created)
+        return ResponseEntity.created(URI("/${created.id}")).body(created)
 
     }
 

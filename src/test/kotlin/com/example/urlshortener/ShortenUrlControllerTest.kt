@@ -51,6 +51,8 @@ class ShortenUrlControllerTest {
             .statusCode(201)
             .body("url", equalTo(requestBody.url.toString()))
             .body("id", notNullValue())
+            .header("Location", notNullValue())
+
     }
 
     @Test
