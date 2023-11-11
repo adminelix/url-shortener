@@ -17,7 +17,7 @@ class ShortenUrlController {
     }
 
     @GetMapping("/{uuid}")
-    fun find(@PathVariable uuid: UUID, @RequestParam redirect: Boolean): ResponseEntity<ShortenUrl> {
+    fun find(@PathVariable uuid: UUID, @RequestParam(required = false) redirect: Boolean): ResponseEntity<ShortenUrl> {
         // TODO implement
         val response = ShortenUrl(uuid, URL("https://foo.bar"))
 
