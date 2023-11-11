@@ -2,8 +2,7 @@ package com.example.urlshortener
 
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.*
 import org.junit.ClassRule
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,6 +15,7 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ContextConfiguration
 import org.testcontainers.containers.PostgreSQLContainer
 import java.net.URL
+import java.util.*
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -24,6 +24,7 @@ class ShortenUrlControllerTest {
 
     @Autowired
     lateinit var repository: ShortenUrlRepository
+
     @LocalServerPort
     var port = 0
 
@@ -53,6 +54,16 @@ class ShortenUrlControllerTest {
     }
 
     @Test
+    fun `GIVEN valid request with ignored id WHEN create shortenUrl THEN return created shortenUrlObject`() {
+        val requestBody = ShortenUrl(URL("https://google.de"), UUID.randomUUID())
+        RestAssured.given().contentType(ContentType.JSON).body(requestBody).post()
+            .then().assertThat()
+            .statusCode(201)
+            .body("url", equalTo(requestBody.url.toString()))
+            .body("id", not(equalTo(requestBody.id.toString())))
+    }
+
+    @Test
     fun `GIVEN valid request WHEN get shortenUrl THEN return shortenUrlObject`() {
         val created = repository.save(ShortenUrl(URL("https://foo.bar")))
         RestAssured.get("{id}", "${created.id}")
@@ -60,6 +71,14 @@ class ShortenUrlControllerTest {
             .statusCode(200)
             .body("url", equalTo(created.url.toString()))
             .body("id", equalTo(created.id.toString()))
+    }
+
+    @Test
+    fun `GIVEN valid request WHEN get shortenUrl THEN not found`() {
+        val id = UUID.randomUUID()
+        RestAssured.get("{id}", "${id}")
+            .then().assertThat()
+            .statusCode(404)
     }
 
     @Test
