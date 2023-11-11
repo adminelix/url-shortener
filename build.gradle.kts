@@ -19,11 +19,14 @@ repositories {
 }
 
 dependencies {
+	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
+	testImplementation("org.testcontainers:postgresql:1.19.1")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("io.rest-assured:rest-assured:5.3.2")
 

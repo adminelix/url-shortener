@@ -1,9 +1,19 @@
 package com.example.urlshortener
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
 import java.net.URL
 import java.util.*
 
+@Entity
 data class ShortenUrl(
-    val id: UUID = UUID.randomUUID(),
-    val url: URL
-)
+    @Column
+    val url: URL?,
+    @Id
+    @GeneratedValue
+    var id: UUID? = null
+) {
+    constructor() : this(null)
+}
